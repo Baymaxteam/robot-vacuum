@@ -6,45 +6,41 @@ float getDirtVal(){
   return a;
 }
 
-float getSonarVal(int num){
+
+float getSonarVal(){
   float distance = 0;
-  switch(num){
-    case 1:
-      // Set up trigger
-      digitalWrite(SONAR1_TRIG,LOW);
-      delayMicroseconds(5);
-      // Start Measurement
-      digitalWrite(SONAR1_TRIG,HIGH);
-      delayMicroseconds(10);
-      digitalWrite(SONAR1_TRIG,LOW);
-      // Acquire and convert to mtrs
-      distance=pulseIn(SONAR1_ECHO,HIGH);
-      return (distance*0.01657);
-      break;
-    case 2:
-      // Set up trigger
-      digitalWrite(SONAR2_TRIG,LOW);
-      delayMicroseconds(5);
-      // Start Measurement
-      digitalWrite(SONAR2_TRIG,HIGH);
-      delayMicroseconds(10);
-      digitalWrite(SONAR2_TRIG,LOW);
-      // Acquire and convert to mtrs
-      distance=pulseIn(SONAR2_ECHO,HIGH);
-      return (distance*0.01657);
-      break;
-    case 3:
-      // Set up trigger
-      digitalWrite(SONAR3_TRIG,LOW);
-      delayMicroseconds(5);
-      // Start Measurement
-      digitalWrite(SONAR3_TRIG,HIGH);
-      delayMicroseconds(10);
-      digitalWrite(SONAR3_TRIG,LOW);
-      // Acquire and convert to mtrs
-      distance=pulseIn(SONAR3_ECHO,HIGH);
-      return (distance*0.01657);
-      break;
-  }
-  
+  // Set up trigger
+  digitalWrite(SONAR1_TRIG,LOW);
+  delayMicroseconds(5);
+  // Start Measurement
+  digitalWrite(SONAR1_TRIG,HIGH);
+  delayMicroseconds(10);
+  digitalWrite(SONAR1_TRIG,LOW);
+  // Acquire and convert to mtrs
+  distance=pulseIn(SONAR1_ECHO,HIGH);
+  sonarMid = distance*0.01657;
 }
+
+
+float getSonarUart(){
+  float temp;
+  Serial2.write(0x55);
+  if(Serial2.available() >= 2){
+    unsigned int MSByteDist = Serial2.read(); // lectura de ambos bytes
+    unsigned int LSByteDist  = Serial2.read();
+    temp  = (MSByteDist * 256 + LSByteDist)/10.0; // distancia
+    if(temp > 0.0 ){
+      sonarLeft = temp;
+    }
+  }
+  Serial1.write(0x55);
+  if(Serial1.available() >= 2){
+    unsigned int MSByteDist = Serial1.read(); // lectura de ambos bytes
+    unsigned int LSByteDist  = Serial1.read();
+    temp  = (MSByteDist * 256 + LSByteDist)/10.0; // distancia
+    if(temp > 0.0 ){
+      sonarRight = temp;
+    }
+  }
+}
+

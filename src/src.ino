@@ -28,7 +28,6 @@ unsigned long last = millis();
 
 float dirtVol, sonarLeft, sonarMid, sonarRight;
 
-
 void calculate_pid(void);
 void motor_control(void);
 void motor_control_calibration(void);
@@ -39,21 +38,20 @@ void Control_Velocity(float Left_Dis, float Mid_Dis, float Right_Dis);
 void Control_Dir(float Left_Dis, float Mid_Dis, float Right_Dis);
 void test_commend(int *flag);
 
-float getSonarVal(int num);
+float getSonarVal();
 float getDirtVal();
+float getSonarUart();
 
- 
+
 void setup(){
   Serial.begin(115200);
+  Serial1.begin(9600);
+  Serial2.begin(9600);
   Serial3.begin(115200); 
   pinMode(DIRT_SENSOR_LED,OUTPUT);
   pinMode(DIRT_SENSOR_SEN, INPUT);
   pinMode(SONAR1_TRIG,OUTPUT);
   pinMode(SONAR1_ECHO, INPUT);  
-  pinMode(SONAR2_TRIG,OUTPUT);
-  pinMode(SONAR2_ECHO, INPUT);
-  pinMode(SONAR3_TRIG,OUTPUT);
-  pinMode(SONAR3_ECHO, INPUT);
   pinMode(RIGHT_WHEEL_H1, OUTPUT);
   pinMode(RIGHT_WHEEL_H2, OUTPUT);
   pinMode(RIGHT_WHEEL_PWM, OUTPUT);
@@ -62,6 +60,7 @@ void setup(){
   pinMode(LEFT_WHEEL_PWM, OUTPUT);
   delay(5);
 }
+
  
 void loop(){
   // Dirt sensor
@@ -69,9 +68,9 @@ void loop(){
    Serial.print("dirtVol: ");
    Serial.print(dirtVol);
   // Sonar
-  sonarLeft = getSonarVal(1);
-  sonarMid = getSonarVal(2);
-  sonarRight = getSonarVal(3);
+  getSonarUart();
+  getSonarVal();
+
    Serial.print(", Sonar: ");
    Serial.print(sonarLeft);Serial.print(", ");
    Serial.print(sonarMid);Serial.print(", ");
@@ -99,4 +98,5 @@ void loop(){
   Serial.print("Flag: ");
   Serial.println(flag);
   Serial.println("");
+//  delay(100);
 }
