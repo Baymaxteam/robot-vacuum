@@ -100,12 +100,13 @@ void motor_test()
 
 void motor_Backward()
 {
-  analogWrite(Speed_Pin_RIGHT, 100);
-  analogWrite(Speed_Pin_LEFT, 100);
+  analogWrite(RIGHT_WHEEL_PWM, 100);
+  analogWrite(LEFT_WHEEL_PWM, 100);
   digitalWrite(LEFT_WHEEL_H1, LOW); //MoterB
   digitalWrite(LEFT_WHEEL_H2, HIGH);
   digitalWrite(LEFT_WHEEL_H1, LOW); //MoterA
   digitalWrite(LEFT_WHEEL_H2, HIGH);
+  Serial.println("Motor : Backward");
   delay(500);
   motor_control_stop();
 
@@ -114,38 +115,41 @@ void motor_Backward()
 
 void motor_Forward()
 {
-  analogWrite(Speed_Pin_RIGHT, 100);
-  analogWrite(Speed_Pin_LEFT, 100);
+  analogWrite(RIGHT_WHEEL_PWM, 100);
+  analogWrite(LEFT_WHEEL_PWM, 100);
   digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterB
   digitalWrite(LEFT_WHEEL_H2, LOW);
   digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterA
   digitalWrite(LEFT_WHEEL_H2, LOW);
   delay(500);
+  Serial.println("Motor : Forward");
   motor_control_stop();
 
 }
 
 void motor_LeftTurn()
 {
-  analogWrite(Speed_Pin_RIGHT, 100);
-  analogWrite(Speed_Pin_LEFT, 100);
+  analogWrite(RIGHT_WHEEL_PWM, 100);
+  analogWrite(LEFT_WHEEL_PWM, 100);
   digitalWrite(LEFT_WHEEL_H1, LOW); //MoterB
   digitalWrite(LEFT_WHEEL_H2, HIGH);
   digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterA
   digitalWrite(LEFT_WHEEL_H2, LOW);
   delay(500);
+   Serial.println("Motor : Left");
   motor_control_stop();
 }
 
 void motor_RightTurn()
 {
-  analogWrite(Speed_Pin_RIGHT, 100);
-  analogWrite(Speed_Pin_LEFT, 100);
+  analogWrite(RIGHT_WHEEL_PWM, 100);
+  analogWrite(LEFT_WHEEL_PWM, 100);
   digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterB
   digitalWrite(LEFT_WHEEL_H2, LOW);
   digitalWrite(LEFT_WHEEL_H1, LOW); //MoterA
   digitalWrite(LEFT_WHEEL_H2, HIGH);
   delay(500);
+   Serial.println("Motor : Right");
   motor_control_stop();
 
 }

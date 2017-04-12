@@ -26,7 +26,8 @@ char val = '0';
 int on = 0;
 unsigned long last = millis();
 
-float dirtVol, sonar1Val, sonar2Val, sonar3Val;
+float dirtVol, sonarLeft, sonarMid, sonarRight;
+
 
 void calculate_pid(void);
 void motor_control(void);
@@ -34,55 +35,13 @@ void motor_control_calibration(void);
 void motor_control_stop(void);
 void motor_test(void);
 
-float getDirtVal(){
-  digitalWrite(DIRT_SENSOR_LED,LOW); // power on the LED
-  delayMicroseconds(300);
-  float a = analogRead(DIRT_SENSOR_SEN); // read the dust value
-  delayMicroseconds(50);
-  return a;
-}
+void Control_Velocity(float Left_Dis, float Mid_Dis, float Right_Dis);
+void Control_Dir(float Left_Dis, float Mid_Dis, float Right_Dis);
+void test_commend(int *flag);
 
-float getSonarVal(int num){
-  switch(num){
-    case 1:
-      // Set up trigger
-      digitalWrite(SONAR1_TRIG,LOW);
-      delayMicroseconds(5);
-      // Start Measurement
-      digitalWrite(SONAR1_TRIG,HIGH);
-      delayMicroseconds(10);
-      digitalWrite(SONAR1_TRIG,LOW);
-      // Acquire and convert to mtrs
-      distance=pulseIn(SONAR1_ECHO,HIGH);
-      return (distance*0.01657);
-      break;
-    case 2:
-      // Set up trigger
-      digitalWrite(SONAR2_TRIG,LOW);
-      delayMicroseconds(5);
-      // Start Measurement
-      digitalWrite(SONAR2_TRIG,HIGH);
-      delayMicroseconds(10);
-      digitalWrite(SONAR2_TRIG,LOW);
-      // Acquire and convert to mtrs
-      distance=pulseIn(SONAR2_ECHO,HIGH);
-      return (distance*0.01657);
-      break;
-    case 3:
-      // Set up trigger
-      digitalWrite(SONAR3_TRIG,LOW);
-      delayMicroseconds(5);
-      // Start Measurement
-      digitalWrite(SONAR3_TRIG,HIGH);
-      delayMicroseconds(10);
-      digitalWrite(SONAR3_TRIG,LOW);
-      // Acquire and convert to mtrs
-      distance=pulseIn(SONAR3_ECHO,HIGH);
-      return (distance*0.01657);
-      break;
-  }
-  
-}
+float getSonarVal(int num);
+float getDirtVal();
+
  
 void setup(){
   Serial.begin(115200);
@@ -107,11 +66,21 @@ void setup(){
 void loop(){
   // Dirt sensor
   dirtVol = getDirtVal();
+   Serial.print("dirtVol: ");
+   Serial.print(dirtVol);
   // Sonar
-  sonar1Val = getSonarVal(1);
-  sonar2Val = getSonarVal(2);
-  sonar3Val = getSonarVal(3);
+  sonarLeft = getSonarVal(1);
+  sonarMid = getSonarVal(2);
+  sonarRight = getSonarVal(3);
+   Serial.print(", Sonar: ");
+   Serial.print(sonarLeft);Serial.print(", ");
+   Serial.print(sonarMid);Serial.print(", ");
+   Serial.print(sonarRight);Serial.println("");
   
+  Control_Velocity(sonarLeft,sonarMid,sonarRight);
+
+  
+  test_commend(&flag);
   if (flag == 0) {
     motor_control_stop();
   } else if (flag == 1) {
@@ -129,5 +98,5 @@ void loop(){
   }
   Serial.print("Flag: ");
   Serial.println(flag);
-  delay(200);
+  Serial.println("");
 }
