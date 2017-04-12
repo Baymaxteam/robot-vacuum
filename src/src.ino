@@ -11,7 +11,7 @@
 #define DIRT_SENSOR_LED 12
 #define DIRT_SENSOR_SEN A0
 
- 
+
 int samplingTime = 280;
 int deltaTime = 40;
 int sleepTime = 9680;
@@ -39,12 +39,15 @@ void motor_control(void);
 void motor_control_calibration(void);
 void motor_control_stop(void);
 void motor_test(void);
- 
-void setup(){
+void InitializeMPU6050() 
+
+
+
+void setup() {
   Serial.begin(115200);
-  Serial3.begin(115200); 
-  pinMode(ledPower,OUTPUT);
-    pinMode(RIGHT_WHEEL_H1, OUTPUT);
+  Serial3.begin(115200);
+  pinMode(ledPower, OUTPUT);
+  pinMode(RIGHT_WHEEL_H1, OUTPUT);
   pinMode(RIGHT_WHEEL_H2, OUTPUT);
   pinMode(RIGHT_WHEEL_PWM, OUTPUT);
   pinMode(LEFT_WHEEL_H1,  OUTPUT);
@@ -52,49 +55,50 @@ void setup(){
   pinMode(LEFT_WHEEL_PWM, OUTPUT);
   delay(5);
 }
- 
-void loop(){
-  digitalWrite(DIRT_SENSOR_LED,LOW); // power on the LED
+
+void loop() {
+  digitalWrite(DIRT_SENSOR_LED, LOW); // power on the LED
   delayMicroseconds(samplingTime);
- 
+
   voMeasured = analogRead(DIRT_SENSOR_SEN); // read the dust value
- 
+
   delayMicroseconds(deltaTime);
-  digitalWrite(ledPower,HIGH); // turn the LED off
+  digitalWrite(ledPower, HIGH); // turn the LED off
   delayMicroseconds(sleepTime);
- 
+
   // 0 - 3.3V mapped to 0 - 1023 integer values
   // recover voltage
   calcVoltage = voMeasured * (3.3 / 1024);
- 
+
   // linear eqaution taken from http://www.howmuchsnow.com/arduino/airquality/
   // Chris Nafis (c) 2012
   dustDensity = 0.17 * calcVoltage - 0.1;
- 
+
   Serial.print("Raw Signal Value (0-1023): ");
   Serial.print(voMeasured);
- 
+
   Serial.print(" - Voltage: ");
   Serial.print(calcVoltage);
- 
+
   Serial.print(" - Dust Density: ");
   Serial.println(dustDensity);
 
- if (flag == 0) {
+  if (flag == 0) {
     motor_control_stop();
-  }
-  else if (flag == 1) {
+  } else if (flag == 1) {
     motor_control_calibration();
-  }
-  else if (flag == 2) {
-    read_sensor_values();
-    calculate_pid();
-    motor_control();
-
-  } else if (flag == 3){
+  } else if (flag == 3) {
     motor_test();
+  } else if (flag == -1) {
+    motor_Forward();
+  }   else if (flag == -2) {
+    motor_Backward();
+  }   else if (flag == -3) {
+    motor_RightTurn();
+  }   else if (flag == -4) {
+    motor_LeftTurn();
   }
-   Serial.print("Flag: ");
+  Serial.print("Flag: ");
   Serial.println(flag);
   delay(200);
 }
