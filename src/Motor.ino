@@ -1,3 +1,26 @@
+void test_commend(int *flag)
+{
+  char inChar;
+  if (Serial.available() > 0) {
+    // get incoming byte:
+    inChar = Serial.read();
+
+    if (inChar == 'R') {
+      *flag = -3;
+    } else if (inChar == 'L') {
+      *flag = -4;
+    } else if (inChar == 'F') {
+      *flag = -1;
+    } else if (inChar == 'B') {
+      *flag = -2;
+    }
+
+    Serial.print("received cmd :");
+    Serial.write(inChar);
+    Serial.println("");
+  }
+}
+
 void calculate_pid()
 {
   P = error;
@@ -72,5 +95,58 @@ void motor_test()
   digitalWrite(RIGHT_WHEEL_H1, HIGH); //MoterA
   digitalWrite(RIGHT_WHEEL_H2, LOW);
   delay(1000);
+}
+
+
+void motor_Backward()
+{
+  analogWrite(Speed_Pin_RIGHT, 100);
+  analogWrite(Speed_Pin_LEFT, 100);
+  digitalWrite(LEFT_WHEEL_H1, LOW); //MoterB
+  digitalWrite(LEFT_WHEEL_H2, HIGH);
+  digitalWrite(LEFT_WHEEL_H1, LOW); //MoterA
+  digitalWrite(LEFT_WHEEL_H2, HIGH);
+  delay(500);
+  motor_control_stop();
+
+}
+
+
+void motor_Forward()
+{
+  analogWrite(Speed_Pin_RIGHT, 100);
+  analogWrite(Speed_Pin_LEFT, 100);
+  digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterB
+  digitalWrite(LEFT_WHEEL_H2, LOW);
+  digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterA
+  digitalWrite(LEFT_WHEEL_H2, LOW);
+  delay(500);
+  motor_control_stop();
+
+}
+
+void motor_LeftTurn()
+{
+  analogWrite(Speed_Pin_RIGHT, 100);
+  analogWrite(Speed_Pin_LEFT, 100);
+  digitalWrite(LEFT_WHEEL_H1, LOW); //MoterB
+  digitalWrite(LEFT_WHEEL_H2, HIGH);
+  digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterA
+  digitalWrite(LEFT_WHEEL_H2, LOW);
+  delay(500);
+  motor_control_stop();
+}
+
+void motor_RightTurn()
+{
+  analogWrite(Speed_Pin_RIGHT, 100);
+  analogWrite(Speed_Pin_LEFT, 100);
+  digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterB
+  digitalWrite(LEFT_WHEEL_H2, LOW);
+  digitalWrite(LEFT_WHEEL_H1, LOW); //MoterA
+  digitalWrite(LEFT_WHEEL_H2, HIGH);
+  delay(500);
+  motor_control_stop();
+
 }
 

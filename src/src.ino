@@ -54,7 +54,7 @@ float getSonarVal(int num){
       digitalWrite(SONAR1_TRIG,LOW);
       // Acquire and convert to mtrs
       distance=pulseIn(SONAR1_ECHO,HIGH);
-      return (distance*0.0001657);
+      return (distance*0.01657);
       break;
     case 2:
       // Set up trigger
@@ -66,7 +66,7 @@ float getSonarVal(int num){
       digitalWrite(SONAR2_TRIG,LOW);
       // Acquire and convert to mtrs
       distance=pulseIn(SONAR2_ECHO,HIGH);
-      return (distance*0.0001657);
+      return (distance*0.01657);
       break;
     case 3:
       // Set up trigger
@@ -78,7 +78,7 @@ float getSonarVal(int num){
       digitalWrite(SONAR3_TRIG,LOW);
       // Acquire and convert to mtrs
       distance=pulseIn(SONAR3_ECHO,HIGH);
-      return (distance*0.0001657);
+      return (distance*0.01657);
       break;
   }
   
@@ -112,21 +112,22 @@ void loop(){
   sonar2Val = getSonarVal(2);
   sonar3Val = getSonarVal(3);
   
- if (flag == 0) {
+  if (flag == 0) {
     motor_control_stop();
-  }
-  else if (flag == 1) {
+  } else if (flag == 1) {
     motor_control_calibration();
-  }
-  else if (flag == 2) {
-    read_sensor_values();
-    calculate_pid();
-    motor_control();
-
-  } else if (flag == 3){
+  } else if (flag == 3) {
     motor_test();
+  } else if (flag == -1) {
+    motor_Forward();
+  }   else if (flag == -2) {
+    motor_Backward();
+  }   else if (flag == -3) {
+    motor_RightTurn();
+  }   else if (flag == -4) {
+    motor_LeftTurn();
   }
-   Serial.print("Flag: ");
+  Serial.print("Flag: ");
   Serial.println(flag);
   delay(200);
 }
