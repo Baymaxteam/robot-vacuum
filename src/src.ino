@@ -16,14 +16,41 @@ int samplingTime = 280;
 int deltaTime = 40;
 int sleepTime = 9680;
 
- 
 float voMeasured = 0;
 float calcVoltage = 0;
 float dustDensity = 0;
+
+
+// control variable
+float Kp = 0.5, Ki = 0, Kd = 0.00; //try
+float error = 0, P = 0, I = 0, D = 0, PID_value = 0;
+float previous_error = 0, previous_I = 0;
+int count_L = 0, count_M = 0, count_R = 0;
+
+int initial_motor_speed = 100; // 降速
+int count_cali = 0, flag = 0;
+char val = '0';
+
+int on = 0;
+unsigned long last = millis();
+
+void calculate_pid(void);
+void motor_control(void);
+void motor_control_calibration(void);
+void motor_control_stop(void);
+void motor_test(void);
  
 void setup(){
-  Serial.begin(9600);
+  Serial.begin(115200);
+  Serial3.begin(115200); 
   pinMode(ledPower,OUTPUT);
+    pinMode(RIGHT_WHEEL_H1, OUTPUT);
+  pinMode(RIGHT_WHEEL_H2, OUTPUT);
+  pinMode(RIGHT_WHEEL_PWM, OUTPUT);
+  pinMode(LEFT_WHEEL_H1,  OUTPUT);
+  pinMode(LEFT_WHEEL_H2,  OUTPUT);
+  pinMode(LEFT_WHEEL_PWM, OUTPUT);
+  delay(5);
 }
  
 void loop(){
@@ -52,6 +79,22 @@ void loop(){
  
   Serial.print(" - Dust Density: ");
   Serial.println(dustDensity);
- 
-  delay(1000);
+
+ if (flag == 0) {
+    motor_control_stop();
+  }
+  else if (flag == 1) {
+    motor_control_calibration();
+  }
+  else if (flag == 2) {
+    read_sensor_values();
+    calculate_pid();
+    motor_control();
+
+  } else if (flag == 3){
+    motor_test();
+  }
+   Serial.print("Flag: ");
+  Serial.println(flag);
+  delay(200);
 }
