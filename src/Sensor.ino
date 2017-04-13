@@ -17,7 +17,7 @@ float getSonarVal(){
   delayMicroseconds(10);
   digitalWrite(SONAR1_TRIG,LOW);
   // Acquire and convert to mtrs
-  distance=pulseIn(SONAR1_ECHO,HIGH);
+  distance=pulseIn(SONAR1_ECHO,HIGH, 6000); // 6000us approximately equal to 100cm 
   sonarMid = distance*0.01657;
 }
 

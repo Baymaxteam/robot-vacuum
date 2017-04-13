@@ -45,8 +45,8 @@ float getSonarUart();
 
 void setup(){
   Serial.begin(115200);
-  Serial1.begin(9600);
-  Serial2.begin(9600);
+  Serial1.begin(9600); // Sonar No. 1
+  Serial2.begin(9600); // Sonar No. 2
   Serial3.begin(115200); 
   pinMode(DIRT_SENSOR_LED,OUTPUT);
   pinMode(DIRT_SENSOR_SEN, INPUT);
