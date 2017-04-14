@@ -18,7 +18,7 @@ float getSonarVal(){
   digitalWrite(SONAR1_TRIG,LOW);
   // Acquire and convert to mtrs
   distance=pulseIn(SONAR1_ECHO,HIGH, 6000); // 6000us approximately equal to 100cm 
-  sonarMid = distance*0.01657;
+  sonarRight = distance*0.01657;
 }
 
 
@@ -30,7 +30,7 @@ float getSonarUart(){
     unsigned int LSByteDist  = Serial2.read();
     temp  = (MSByteDist * 256 + LSByteDist)/10.0; // distancia
     if(temp > 0.0 ){
-      sonarLeft = temp;
+      sonarMid = temp;
     }
   }
   Serial1.write(0x55);
@@ -39,7 +39,7 @@ float getSonarUart(){
     unsigned int LSByteDist  = Serial1.read();
     temp  = (MSByteDist * 256 + LSByteDist)/10.0; // distancia
     if(temp > 0.0 ){
-      sonarRight = temp;
+      sonarLeft = temp;
     }
   }
 }
