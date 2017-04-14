@@ -119,8 +119,8 @@ void motor_Forward(){
 }
 
 void motor_SlowForward(){
-  analogWrite(RIGHT_WHEEL_PWM, 50);
-  analogWrite(LEFT_WHEEL_PWM, 50);
+  analogWrite(RIGHT_WHEEL_PWM, 80);
+  analogWrite(LEFT_WHEEL_PWM, 80);
   digitalWrite(LEFT_WHEEL_H1, LOW); //MoterB
   digitalWrite(LEFT_WHEEL_H2, HIGH);
   digitalWrite(RIGHT_WHEEL_H1, HIGH); //MoterA

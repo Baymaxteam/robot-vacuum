@@ -27,7 +27,7 @@ int robot_state = 0; // 0: manual mode, >1: auto mode
 float dirtVol, sonarLeft, sonarMid, sonarRight;
 
 // Robot behavior setting
-const float MidDis_limit = 40;
+const float MidDis_limit = 20;
 const float SmallDis_limit = 10;
 const float dirt_threshold = 100;
 
@@ -67,9 +67,9 @@ void getSensorsValue(){
   Serial3.print("dirtVol: ");
   Serial3.print(dirtVol);
   Serial3.print(", Sonar: ");
-  Serial3.print(sonarLeft);Serial.print(", ");
-  Serial3.print(sonarMid);Serial.print(", ");
-  Serial3.print(sonarRight);Serial.println("");
+  Serial3.print(sonarLeft);Serial3.print(", ");
+  Serial3.print(sonarMid);Serial3.print(", ");
+  Serial3.print(sonarRight);Serial3.println("");
 }
 
 void setup(){
@@ -95,7 +95,12 @@ void loop(){
 
   getSensorsValue();
   BT_Commend();
-  
+  Serial3.print("Flag: ");
+  Serial3.println(flag);
+  Serial3.println("");
+  Serial3.print("robot_state: ");
+  Serial3.println(robot_state);
+  Serial3.println("");
   if(robot_state==0){ // 0: manual mode, >1: auto mode
     // test_commend(&flag);
     if (flag == 0) {
@@ -117,11 +122,10 @@ void loop(){
       motor_LeftTurn();
       flag = 0;
     }
-//    Serial.print("Flag: ");
-//    Serial.println(flag);
-//    Serial.println("");
+
   }
   else if(robot_state == 1){
+    flag = 100;
     Control_Motion(sonarLeft,sonarMid,sonarRight, dirtVol);
     if (flag == 0){
       robot_state = 0;
