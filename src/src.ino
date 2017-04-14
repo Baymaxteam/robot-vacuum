@@ -124,6 +124,7 @@ void loop(){
   else if(robot_state == 1){
     Control_Motion(sonarLeft,sonarMid,sonarRight, dirtVol);
     if (flag == 0){
+      robot_state = 0;
       motor_control_stop();
     }
   }

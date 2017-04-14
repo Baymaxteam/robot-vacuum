@@ -1,7 +1,6 @@
 void Control_Motion(float Left_Dis, float Mid_Dis, float Right_Dis, float dirty_vol) {
     // 如果三者任意距離在10-40cm,減速, 小於20則優先右轉
     if (Left_Dis <= MidDis_limit ||  Mid_Dis <= MidDis_limit || Right_Dis <= MidDis_limit  ) {
-        
         if (Left_Dis <= SmallDis_limit ||  Mid_Dis <= SmallDis_limit || Right_Dis <= SmallDis_limit  ) {
             ControlBackandRightTurning();
             Serial.println("DIS : touch and turn right");
