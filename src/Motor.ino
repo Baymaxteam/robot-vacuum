@@ -13,6 +13,8 @@ void test_commend(int *flag)
       *flag = -1;
     } else if (inChar == 'B') {
       *flag = -2;
+    } else if (inChar == 'S') {
+      *flag = 0;
     }
 
     Serial.print("received cmd :");
@@ -33,8 +35,7 @@ void calculate_pid()
   previous_error = error;
 }
 
-void motor_control()
-{
+void motor_control() {
   // Calculating the effective motor speed:
   int left_motor_speed = initial_motor_speed + PID_value;
   int right_motor_speed = initial_motor_speed - PID_value;
@@ -59,8 +60,7 @@ void motor_control()
   digitalWrite(RIGHT_WHEEL_H2, LOW);
 
 }
-void motor_control_calibration()
-{
+void motor_control_calibration(){
   //旋轉
   analogWrite(RIGHT_WHEEL_PWM, 100);
   analogWrite(LEFT_WHEEL_PWM, 100);
@@ -70,23 +70,21 @@ void motor_control_calibration()
   digitalWrite(RIGHT_WHEEL_H2, LOW);
 }
 
-void motor_control_stop()
-{
+void motor_control_stop(){
   digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterB
   digitalWrite(LEFT_WHEEL_H2, HIGH);
   digitalWrite(RIGHT_WHEEL_H1, HIGH); //MoterA
   digitalWrite(RIGHT_WHEEL_H2, HIGH);
 }
 
-void motor_test()
-{
+void motor_test(){
   analogWrite(RIGHT_WHEEL_PWM, 100);
   analogWrite(LEFT_WHEEL_PWM, 100);
   digitalWrite(LEFT_WHEEL_H1, LOW); //MoterB
   digitalWrite(LEFT_WHEEL_H2, HIGH);
   digitalWrite(RIGHT_WHEEL_H1, LOW); //MoterA
   digitalWrite(RIGHT_WHEEL_H2, HIGH);
-  delay(1000);
+  delay(control_delay);
 
   analogWrite(RIGHT_WHEEL_PWM, 100);
   analogWrite(LEFT_WHEEL_PWM, 100);
@@ -94,59 +92,63 @@ void motor_test()
   digitalWrite(LEFT_WHEEL_H2, LOW);
   digitalWrite(RIGHT_WHEEL_H1, HIGH); //MoterA
   digitalWrite(RIGHT_WHEEL_H2, LOW);
-  delay(1000);
+  delay(control_delay);
 }
 
-
-void motor_Backward()
-{
+void motor_Backward(){
   analogWrite(RIGHT_WHEEL_PWM, 100);
   analogWrite(LEFT_WHEEL_PWM, 100);
-  digitalWrite(LEFT_WHEEL_H1, LOW); //MoterB
-  digitalWrite(LEFT_WHEEL_H2, HIGH);
-  digitalWrite(LEFT_WHEEL_H1, LOW); //MoterA
-  digitalWrite(LEFT_WHEEL_H2, HIGH);
+  digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterB
+  digitalWrite(LEFT_WHEEL_H2, LOW);
+  digitalWrite(RIGHT_WHEEL_H1, LOW); //MoterA
+  digitalWrite(RIGHT_WHEEL_H2, HIGH);
   Serial.println("Motor : Backward");
-  motor_control_stop();
-
+  delay(2 * control_delay);
 }
 
-
-void motor_Forward()
-{
-  analogWrite(RIGHT_WHEEL_PWM, 100);
-  analogWrite(LEFT_WHEEL_PWM, 100);
-  digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterB
-  digitalWrite(LEFT_WHEEL_H2, LOW);
-  digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterA
-  digitalWrite(LEFT_WHEEL_H2, LOW);
-  Serial.println("Motor : Forward");
-  motor_control_stop();
-
-}
-
-void motor_LeftTurn()
-{
+void motor_Forward(){
   analogWrite(RIGHT_WHEEL_PWM, 100);
   analogWrite(LEFT_WHEEL_PWM, 100);
   digitalWrite(LEFT_WHEEL_H1, LOW); //MoterB
   digitalWrite(LEFT_WHEEL_H2, HIGH);
-  digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterA
-  digitalWrite(LEFT_WHEEL_H2, LOW);
-  Serial.println("Motor : Left");
-  motor_control_stop();
+  digitalWrite(RIGHT_WHEEL_H1, HIGH); //MoterA
+  digitalWrite(RIGHT_WHEEL_H2, LOW);
+  Serial.println("Motor : Forward");
+  delay(2 * control_delay);
+
 }
 
-void motor_RightTurn()
-{
+void motor_SlowForward(){
+  analogWrite(RIGHT_WHEEL_PWM, 50);
+  analogWrite(LEFT_WHEEL_PWM, 50);
+  digitalWrite(LEFT_WHEEL_H1, LOW); //MoterB
+  digitalWrite(LEFT_WHEEL_H2, HIGH);
+  digitalWrite(RIGHT_WHEEL_H1, HIGH); //MoterA
+  digitalWrite(RIGHT_WHEEL_H2, LOW);
+  Serial.println("Motor : Slow Forward");
+  delay(2 * control_delay);
+}
+
+void motor_LeftTurn(){
   analogWrite(RIGHT_WHEEL_PWM, 100);
   analogWrite(LEFT_WHEEL_PWM, 100);
   digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterB
   digitalWrite(LEFT_WHEEL_H2, LOW);
-  digitalWrite(LEFT_WHEEL_H1, LOW); //MoterA
-  digitalWrite(LEFT_WHEEL_H2, HIGH);
-  Serial.println("Motor : Right");
-  motor_control_stop();
+  digitalWrite(RIGHT_WHEEL_H1, HIGH); //MoterA
+  digitalWrite(RIGHT_WHEEL_H2, LOW);
+  Serial.println("Motor : Left");
+  delay(control_delay);
 
+}
+
+void motor_RightTurn(){
+  analogWrite(RIGHT_WHEEL_PWM, 100);
+  analogWrite(LEFT_WHEEL_PWM, 100);
+  digitalWrite(LEFT_WHEEL_H1, LOW); //MoterB
+  digitalWrite(LEFT_WHEEL_H2, HIGH);
+  digitalWrite(RIGHT_WHEEL_H1, LOW); //MoterA
+  digitalWrite(RIGHT_WHEEL_H2, HIGH);
+  Serial.println("Motor : Right");
+  delay(control_delay);
 }
 

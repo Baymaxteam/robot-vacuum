@@ -31,6 +31,7 @@ const float MidDis_limit = 40;
 const float SmallDis_limit = 10;
 const float dirt_threshold = 100;
 
+const int control_delay = 200;
 
 void calculate_pid(void);
 void motor_control(void);
@@ -52,15 +53,23 @@ float getSonarUart();
 void getSensorsValue(){
   // Dirt sensor
   dirtVol = getDirtVal();
-  Serial.print("dirtVol: ");
-  Serial.print(dirtVol);
+
   // Sonar
   getSonarUart();
   getSonarVal();
+  Serial.print("dirtVol: ");
+  Serial.print(dirtVol);
   Serial.print(", Sonar: ");
   Serial.print(sonarLeft);Serial.print(", ");
   Serial.print(sonarMid);Serial.print(", ");
   Serial.print(sonarRight);Serial.println("");
+
+  Serial3.print("dirtVol: ");
+  Serial3.print(dirtVol);
+  Serial3.print(", Sonar: ");
+  Serial3.print(sonarLeft);Serial.print(", ");
+  Serial3.print(sonarMid);Serial.print(", ");
+  Serial3.print(sonarRight);Serial.println("");
 }
 
 void setup(){
@@ -85,9 +94,10 @@ void setup(){
 void loop(){
 
   getSensorsValue();
+  BT_Commend();
   
   if(robot_state==0){ // 0: manual mode, >1: auto mode
-    test_commend(&flag);
+    // test_commend(&flag);
     if (flag == 0) {
       motor_control_stop();
     } else if (flag == 1) {
@@ -96,20 +106,27 @@ void loop(){
       motor_test();
     } else if (flag == -1) {
       motor_Forward();
+      flag = 0;
     }   else if (flag == -2) {
       motor_Backward();
+       flag = 0;
     }   else if (flag == -3) {
       motor_RightTurn();
+       flag = 0;
     }   else if (flag == -4) {
       motor_LeftTurn();
+      flag = 0;
     }
-    Serial.print("Flag: ");
-    Serial.println(flag);
-    Serial.println("");
+//    Serial.print("Flag: ");
+//    Serial.println(flag);
+//    Serial.println("");
   }
   else if(robot_state == 1){
     Control_Motion(sonarLeft,sonarMid,sonarRight, dirtVol);
+    if (flag == 0){
+      motor_control_stop();
+    }
   }
   
-  delay(100);
+//  delay(100);
 }
