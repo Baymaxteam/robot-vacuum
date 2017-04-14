@@ -26,13 +26,19 @@ int robot_state = 0; // 0: manual mode, >1: auto mode
 
 float dirtVol, sonarLeft, sonarMid, sonarRight;
 
+// Robot behavior setting
+const float MidDis_limit = 40;
+const float SmallDis_limit = 10;
+const float dirt_threshold = 100;
+
+
 void calculate_pid(void);
 void motor_control(void);
 void motor_control_calibration(void);
 void motor_control_stop(void);
 void motor_test(void);
 
-void Control_Velocity(float Left_Dis, float Mid_Dis, float Right_Dis);
+void Control_Motion(float Left_Dis, float Mid_Dis, float Right_Dis, float dirty_vol);
 void Control_Dir(float Left_Dis, float Mid_Dis, float Right_Dis);
 void ControlHeavySweep();
 void ControlBackandRightTurning();
@@ -102,7 +108,7 @@ void loop(){
     Serial.println("");
   }
   else if(robot_state == 1){
-    Control_Velocity(sonarLeft,sonarMid,sonarRight);
+    Control_Motion(sonarLeft,sonarMid,sonarRight, dirtVol);
   }
   
   delay(100);
