@@ -1,9 +1,5 @@
 #define SONAR1_TRIG     2
 #define SONAR1_ECHO     3
-#define SONAR2_TRIG     4
-#define SONAR2_ECHO     5
-#define SONAR3_TRIG     22
-#define SONAR3_ECHO     23
 #define RIGHT_WHEEL_H1  6
 #define RIGHT_WHEEL_H2  7
 #define RIGHT_WHEEL_PWM 8
@@ -26,6 +22,8 @@ char val = '0';
 int on = 0;
 unsigned long last = millis();
 
+int robot_state = 0; // 0: manual mode, >1: auto mode
+
 float dirtVol, sonarLeft, sonarMid, sonarRight;
 
 void calculate_pid(void);
@@ -36,17 +34,33 @@ void motor_test(void);
 
 void Control_Velocity(float Left_Dis, float Mid_Dis, float Right_Dis);
 void Control_Dir(float Left_Dis, float Mid_Dis, float Right_Dis);
+void ControlHeavySweep();
+void ControlBackandRightTurning();
+
 void test_commend(int *flag);
 
 float getSonarVal();
 float getDirtVal();
 float getSonarUart();
 
+void getSensorsValue(){
+  // Dirt sensor
+  dirtVol = getDirtVal();
+  Serial.print("dirtVol: ");
+  Serial.print(dirtVol);
+  // Sonar
+  getSonarUart();
+  getSonarVal();
+  Serial.print(", Sonar: ");
+  Serial.print(sonarLeft);Serial.print(", ");
+  Serial.print(sonarMid);Serial.print(", ");
+  Serial.print(sonarRight);Serial.println("");
+}
 
 void setup(){
   Serial.begin(115200);
-  Serial1.begin(9600); // Sonar No. 1
-  Serial2.begin(9600); // Sonar No. 2
+  Serial1.begin(9600); // Sonar No. 2
+  Serial2.begin(9600); // Sonar No. 3
   Serial3.begin(115200); 
   pinMode(DIRT_SENSOR_LED,OUTPUT);
   pinMode(DIRT_SENSOR_SEN, INPUT);
@@ -63,40 +77,33 @@ void setup(){
 
  
 void loop(){
-  // Dirt sensor
-  dirtVol = getDirtVal();
-   Serial.print("dirtVol: ");
-   Serial.print(dirtVol);
-  // Sonar
-  getSonarUart();
-  getSonarVal();
 
-   Serial.print(", Sonar: ");
-   Serial.print(sonarLeft);Serial.print(", ");
-   Serial.print(sonarMid);Serial.print(", ");
-   Serial.print(sonarRight);Serial.println("");
+  getSensorsValue();
   
-  Control_Velocity(sonarLeft,sonarMid,sonarRight);
-
-  
-  test_commend(&flag);
-  if (flag == 0) {
-    motor_control_stop();
-  } else if (flag == 1) {
-    motor_control_calibration();
-  } else if (flag == 3) {
-    motor_test();
-  } else if (flag == -1) {
-    motor_Forward();
-  }   else if (flag == -2) {
-    motor_Backward();
-  }   else if (flag == -3) {
-    motor_RightTurn();
-  }   else if (flag == -4) {
-    motor_LeftTurn();
+  if(robot_state==0){ // 0: manual mode, >1: auto mode
+    test_commend(&flag);
+    if (flag == 0) {
+      motor_control_stop();
+    } else if (flag == 1) {
+      motor_control_calibration();
+    } else if (flag == 3) {
+      motor_test();
+    } else if (flag == -1) {
+      motor_Forward();
+    }   else if (flag == -2) {
+      motor_Backward();
+    }   else if (flag == -3) {
+      motor_RightTurn();
+    }   else if (flag == -4) {
+      motor_LeftTurn();
+    }
+    Serial.print("Flag: ");
+    Serial.println(flag);
+    Serial.println("");
   }
-  Serial.print("Flag: ");
-  Serial.println(flag);
-  Serial.println("");
-//  delay(100);
+  else if(robot_state == 1){
+    Control_Velocity(sonarLeft,sonarMid,sonarRight);
+  }
+  
+  delay(100);
 }

@@ -107,7 +107,6 @@ void motor_Backward()
   digitalWrite(LEFT_WHEEL_H1, LOW); //MoterA
   digitalWrite(LEFT_WHEEL_H2, HIGH);
   Serial.println("Motor : Backward");
-  delay(500);
   motor_control_stop();
 
 }
@@ -121,7 +120,6 @@ void motor_Forward()
   digitalWrite(LEFT_WHEEL_H2, LOW);
   digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterA
   digitalWrite(LEFT_WHEEL_H2, LOW);
-  delay(500);
   Serial.println("Motor : Forward");
   motor_control_stop();
 
@@ -135,8 +133,7 @@ void motor_LeftTurn()
   digitalWrite(LEFT_WHEEL_H2, HIGH);
   digitalWrite(LEFT_WHEEL_H1, HIGH); //MoterA
   digitalWrite(LEFT_WHEEL_H2, LOW);
-  delay(500);
-   Serial.println("Motor : Left");
+  Serial.println("Motor : Left");
   motor_control_stop();
 }
 
@@ -148,8 +145,7 @@ void motor_RightTurn()
   digitalWrite(LEFT_WHEEL_H2, LOW);
   digitalWrite(LEFT_WHEEL_H1, LOW); //MoterA
   digitalWrite(LEFT_WHEEL_H2, HIGH);
-  delay(500);
-   Serial.println("Motor : Right");
+  Serial.println("Motor : Right");
   motor_control_stop();
 
 }
