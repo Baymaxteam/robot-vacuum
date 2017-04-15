@@ -1,12 +1,19 @@
 void Control_Motion(float Left_Dis, float Mid_Dis, float Right_Dis, float dirty_vol) {
     // 如果三者任意距離在10-40cm,減速, 小於20則優先右轉
     if (Left_Dis <= MidDis_limit ||  Mid_Dis <= MidDis_limit || Right_Dis <= MidDis_limit  ) {
-        if (Left_Dis <= SmallDis_limit ||  Mid_Dis <= SmallDis_limit || Right_Dis <= SmallDis_limit  ) {
+        if (Left_Dis <= SmallDis_limit ||  Mid_Dis <= SmallDis_limit ) {
             ControlBackandRightTurning();
             Serial.println("DIS : touch and turn right");
             Serial3.println("DIS : touch and turn right");
             
-        } else{
+        } 
+        else if(Right_Dis <= SmallDis_limit){
+            ControlBackandLeftTurning();
+            Serial.println("DIS : touch and turn left");
+            Serial3.println("DIS : touch and turn left");
+        }
+        
+        else{
             motor_automode_SlowForward();
             Serial.println("DIS : slow down");
             Serial3.println("DIS : slow down");
@@ -28,11 +35,11 @@ void Control_Motion(float Left_Dis, float Mid_Dis, float Right_Dis, float dirty_
     Serial3.println(rb_counter);
     if(rb_counter > random_backward){
       rb_counter=0;
-      random_backward = random(100, 400);
+      random_backward = random(100, 200);
       Serial3.print("New Random: ");
       Serial3.println(random_backward);
-      motor_automode_Backward();
-      delay(2000);
+      motor_Backward();
+      delay(1000);
       motor_automode_RightTurn();
       delay(150);
     }
@@ -49,6 +56,13 @@ void ControlBackandRightTurning(){
   motor_automode_Backward();
   delay(200);
   motor_automode_RightTurn();
+  delay(100);
+}
+
+void ControlBackandLeftTurning(){
+  motor_automode_Backward();
+  delay(200);
+  motor_automode_LeftTurn();
   delay(100);
 }
 
