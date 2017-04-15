@@ -27,9 +27,11 @@ int robot_state = 0; // 0: manual mode, >1: auto mode
 float dirtVol, sonarLeft, sonarMid, sonarRight;
 
 // Robot behavior setting
-const float MidDis_limit = 20;
-const float SmallDis_limit = 10;
+const float MidDis_limit = 25;
+const float SmallDis_limit = 15;
 const float dirt_threshold = 100;
+const int motor_offset=20;
+int random_backward=100, rb_counter=0;
 
 const int control_delay = 200;
 
@@ -38,6 +40,9 @@ void motor_control(void);
 void motor_control_calibration(void);
 void motor_control_stop(void);
 void motor_test(void);
+void motor_automode_RightTurn();
+void motor_automode_Forward();
+void motor_automode_SlowForward();
 
 void Control_Motion(float Left_Dis, float Mid_Dis, float Right_Dis, float dirty_vol);
 void Control_Dir(float Left_Dis, float Mid_Dis, float Right_Dis);
@@ -92,7 +97,6 @@ void setup(){
 
  
 void loop(){
-
   getSensorsValue();
   BT_Commend();
   Serial3.print("Flag: ");
